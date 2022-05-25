@@ -1,3 +1,4 @@
+import Printf # I just love the C way of printing...
 
 #=
 # TODO
@@ -106,9 +107,16 @@ end
 
 printArray = function()
 	for pos in reverse(1:13)
+		offset = 0
 		for a in reverse(0:7)
 			for b in reverse(0:7)
-				print(BigInt(getOffset(pos, a, b)), ",	")
+				if 7-a  <= 14 - pos && 7-b <= 14 - pos
+				#	offset += getOffset(pos, a, b)
+					Printf.@printf("0x%08X,	", offset)
+					offset += getOffset(pos, a, b)
+				else
+					Printf.@printf("0x%08X,	", 0)
+				end
 			end
 			println()
 		end
