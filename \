@@ -92,9 +92,8 @@ end
 
 # change this function if you are using a different board
 getOffset = function(spaces, cA, cB)
-	if(cA > 7 || cB > 7)
-		return 0
-	end
+	cA = min(cA, 7)
+	cB = min(cB, 7)
 	if spaces > 14
 		return 0
 	elseif spaces > 10
@@ -109,49 +108,34 @@ getOffset = function(spaces, cA, cB)
 end
 
 printArray = function()
-	
-	println("static const long INDEX[] = {")
-	for pos in reverse(1:14)
+	for pos in reverse(0:13)
 		offset = 0
 	#=	print("[",pos,"]")
 		for m in reverse(0:7)
 			Printf.@printf("(% 9i)",m)
 		end
 		println()
-	=#
-		m = 0
-		for a in reverse(0:7)
+	=#	for a in reverse(0:7)
 	#		print("(",a,")")
 			for b in reverse(0:7)	
 				if 7-a  <= 14 - pos && 7-b <= 14 - pos
 				#	Printf.@printf("% 9i, ", offset)
-				#	if(7-a <= pos+1 &&  7-b <= pos+1)
+					if(7-a <= pos+1 &&  7-b <= pos+1)
 						k = a*8 + b + 1
 						x = trunc(Int,k/8)
 						y = k%8
 				#		Printf.@printf("(%i, %i)", x,y)
-					#	Printf.@printf("[%2i %3i] ",pos, m)
-						Printf.@printf("% 9i, ", 0)
-						off = getOffset(pos-1, a,b)
-						Printf.@printf("% 9i, ", off)
-						off += getOffset(pos-1, a,b-1)
-						Printf.@printf("% 9i, ", off)
-						off += getOffset(pos-1, a-1,b)
-						Printf.@printf("% 9i, ", off)
-						m += 1
-						println()
-				#		offset = getOffset(pos, b, a)
-				#	end
-				#	Printf.@printf("% 9i, ", offset)
+						offset = getOffset(pos, x, y)
+					end
+					Printf.@printf("% 9i, ", offset)
 				else
-					Printf.@printf("0,0,0,0,\n")
+					Printf.@printf("% 9i, ", 0)
 				end
 			end
-		#	println()
+			println()
 		end
 		println()
 	end
-	println("};")
 end
 
 

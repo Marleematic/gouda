@@ -1,3 +1,4 @@
+#include "lookup.h"
 #include "util.h"
 #include "config.h"
 #include <stdio.h>
@@ -26,17 +27,24 @@ uint _getIndex(uint b) {
 long getIndex(char *input) {
 	long pos = 0;
 	long index = 0;
+	long m = 0;
+	long c = 0;
 	do {
-		if(*input == 'a') {
-			pos += 7;
-		} else if(*input == 'b') {
-			pos += 1;
-		} else if(*input == 'd') {
-			pos += 8;
+		m = 0;
+		if(*(c+input) == 'b') {
+			m = pos + 1;
+			pos += 4;
+		} else if(*(c+input) == 'a') {
+			m = pos + 2;
+			pos += 4*8;
+		} else if(*(c+input) == 'd') {
+			m = pos + 3;
+			pos += 4+8*4;
 		}
-		index += INDEX[pos];
-		pos += 49;
-		printf("[%i]\n", pos);
-	} while(*(++input) != '\0');
+		index += INDEX[m];
+	//	printf(" [%2i] %8i (%8i) %8i\n",c, m,pos, index);
+		pos += 64*4;
+		printf("[%2i] %c %8i (%8i) %i\n",c,*(c+input),m, INDEX[m], index);
+	} while(*((++c)+input) != '\0');
 	return index;
 }
